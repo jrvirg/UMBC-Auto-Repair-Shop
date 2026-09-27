@@ -1,0 +1,71 @@
+{% extends "layout.html" %}
+{% block title %}{{ customer.Name }}{% endblock %}
+{% block content %}
+<div style="display:flex;align-items:center;gap:16px;margin-bottom:24px">
+    <h1 style="margin:0">{{ customer.Name }}</h1>
+    <a href="/customers/{{ customer.CustID }}/edit" class="btn btn-outline btn-sm">Edit</a>
+    <a href="/customers" class="btn btn-secondary btn-sm">← Back</a>
+</div>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+<div class="card">
+    <h2 style="margin-top:0">Contact Info</h2>
+    <p><strong>Email:</strong> {{ customer.Email }}</p>
+    <p style="margin-top:8px"><strong>Address:</strong> {{ customer.Address }}</p>
+    <p style="margin-top:8px"><strong>Phones:</strong>
+        {% if phones %}
+            {% for p in phones %}<span class="badge badge-blue">{{ p.PhoneNumber }}</span> {% endfor %}
+        {% else %}—{% endif %}
+    </p>
+</div>
+<div class="card">
+    <h2 style="margin-top:0">Quick Stats</h2>
+    <div style="display:flex;gap:24px">
+        <div><div style="font-size:.75rem;color:var(--muted)">Purchases</div>
+             <div style="font-family:'Rajdhani',sans-serif;font-size:1.8rem;color:var(--accent)">{{ sales|length }}</div></div>
+        <div><div style="font-size:.75rem;color:var(--muted)">Services</div>
+             <div style="font-family:'Rajdhani',sans-serif;font-size:1.8rem;color:var(--accent)">{{ services|length }}</div></div>
+    </div>
+</div>
+</div>
+
+<h2>Purchase History</h2>
+<div class="card table-wrap">
+<table>
+    <thead><tr><th>Sale ID</th><th>Vehicle</th><th>Date</th><th>Price</th><th>Payment</th><th>Financing</th></tr></thead>
+    <tbody>
+    {% for s in sales %}
+    <tr>
+        <td>{{ s.SaleID }}</td>
+        <td>{{ s.Year }} {{ s.Make }} {{ s.Model }}</td>
+        <td>{{ s.DateOfSale }}</td>
+        <td>${{ "%.2f"|format(s.SalePrice) }}</td>
+        <td><span class="badge badge-blue">{{ s.PaymentMethod }}</span></td>
+        <td>{{ s.FinancingOption }}</td>
+    </tr>
+    {% else %}
+    <tr><td colspan="6" style="text-align:center;color:var(--muted);padding:20px">No sales records.</td></tr>
+    {% endfor %}
+    </tbody>
+</table>
+</div>
+
+<h2>Service History</h2>
+<div class="card table-wrap">
+<table>
+    <thead><tr><th>Service ID</th><th>Vehicle</th><th>Date</th><th>Cost</th></tr></thead>
+    <tbody>
+    {% for s in services %}
+    <tr>
+        <td>{{ s.ServiceID }}</td>
+        <td>{{ s.Year }} {{ s.Make }} {{ s.Model }}</td>
+        <td>{{ s.ServiceDate }}</td>
+        <td>${{ "%.2f"|format(s.ServicePrice) }}</td>
+    </tr>
+    {% else %}
+    <tr><td colspan="4" style="text-align:center;color:var(--muted);padding:20px">No service records.</td></tr>
+    {% endfor %}
+    </tbody>
+</table>
+</div>
+{% endblock %}

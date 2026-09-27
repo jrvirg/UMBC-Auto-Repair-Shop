@@ -1,0 +1,62 @@
+{% extends "layout.html" %}
+{% block title %}New Sale{% endblock %}
+{% block content %}
+<h1>Create Sale Transaction</h1>
+<div class="card" style="max-width:720px">
+<form method="POST">
+    <div class="form-grid">
+        <div>
+            <label>Customer</label>
+            <select name="cust_id" required>
+                <option value="">— Select —</option>
+                {% for c in customers %}
+                <option value="{{ c.CustID }}">{{ c.Name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div>
+            <label>Available Vehicle</label>
+            <select name="vehicle_id" required>
+                <option value="">— Select —</option>
+                {% for v in vehicles %}
+                <option value="{{ v.VehicleID }}">{{ v.Make }} {{ v.Model }} {{ v.Year }} — ${{ "%.0f"|format(v.Price) }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div>
+            <label>Sales Employee</label>
+            <select name="employee_id" required>
+                <option value="">— Select —</option>
+                {% for e in employees %}
+                <option value="{{ e.EmployeeID }}">{{ e.Username }} ({{ e.Job }})</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div>
+            <label>Sale Price ($)</label>
+            <input type="number" name="sale_price" step="0.01" min="0" required>
+        </div>
+        <div>
+            <label>Date of Sale</label>
+            <input type="text" name="date_of_sale" class="datepicker" placeholder="YYYY-MM-DD" required>
+        </div>
+        <div>
+            <label>Payment Method</label>
+            <select name="payment_method" required>
+                <option value="cash">Cash</option>
+                <option value="card">Card</option>
+                <option value="check">Check</option>
+            </select>
+        </div>
+        <div style="grid-column:1/-1">
+            <label>Financing Option <span style="color:var(--muted)">(leave blank if none)</span></label>
+            <input type="text" name="financing_option" placeholder="36-month loan, N/A, etc.">
+        </div>
+    </div>
+    <div class="form-actions">
+        <button type="submit" class="btn btn-primary">Record Sale</button>
+        <a href="/sales" class="btn btn-secondary">Cancel</a>
+    </div>
+</form>
+</div>
+{% endblock %}

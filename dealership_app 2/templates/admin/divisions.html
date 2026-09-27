@@ -1,0 +1,56 @@
+{% extends "layout.html" %}
+{% block title %}Divisions &amp; Departments{% endblock %}
+{% block content %}
+<div style="display:flex;align-items:center;gap:16px;margin-bottom:24px">
+    <h1 style="margin:0">Divisions &amp; Departments</h1>
+    <a href="/admin/employees" class="btn btn-secondary btn-sm">← Employees</a>
+</div>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:24px">
+
+<div>
+<h2>Divisions</h2>
+<div class="card">
+<table style="width:100%;margin-bottom:16px">
+    <thead><tr><th>ID</th><th>Name</th><th>Depts</th></tr></thead>
+    <tbody>
+    {% for d in divisions %}
+    <tr><td>{{ d.DivisionID }}</td><td>{{ d.Name }}</td><td>{{ d.DeptCount }}</td></tr>
+    {% endfor %}
+    </tbody>
+</table>
+<h3>Add Division</h3>
+<form method="POST" action="/admin/divisions/add" style="display:flex;gap:8px">
+    <input type="text" name="name" placeholder="Division name" required style="flex:1">
+    <button type="submit" class="btn btn-primary btn-sm">Add</button>
+</form>
+</div>
+</div>
+
+<div>
+<h2>Departments</h2>
+<div class="card">
+<table style="width:100%;margin-bottom:16px">
+    <thead><tr><th>ID</th><th>Name</th><th>Division</th></tr></thead>
+    <tbody>
+    {% for d in departments %}
+    <tr><td>{{ d.DepartmentID }}</td><td>{{ d.Name }}</td><td>{{ d.DivName }}</td></tr>
+    {% endfor %}
+    </tbody>
+</table>
+<h3>Add Department</h3>
+<form method="POST" action="/admin/departments/add" style="display:flex;gap:8px;flex-wrap:wrap">
+    <input type="text" name="name" placeholder="Department name" required style="flex:1;min-width:140px">
+    <select name="division_id" required style="flex:1;min-width:120px">
+        <option value="">Division…</option>
+        {% for d in divisions %}
+        <option value="{{ d.DivisionID }}">{{ d.Name }}</option>
+        {% endfor %}
+    </select>
+    <button type="submit" class="btn btn-primary btn-sm">Add</button>
+</form>
+</div>
+</div>
+
+</div>
+{% endblock %}

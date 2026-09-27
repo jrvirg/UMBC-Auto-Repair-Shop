@@ -1,0 +1,54 @@
+{% extends "layout.html" %}
+{% block title %}{{ 'Edit' if vehicle else 'Add' }} Vehicle{% endblock %}
+{% block content %}
+<h1>{{ 'Edit' if vehicle else 'Add New' }} Vehicle</h1>
+<div class="card" style="max-width:720px">
+<form method="POST">
+    <div class="form-grid">
+        <div>
+            <label>VIN</label>
+            <input type="text" name="vin" value="{{ vehicle.VIN if vehicle else '' }}" maxlength="17" required>
+        </div>
+        <div>
+            <label>Year</label>
+            <input type="number" name="year" value="{{ vehicle.Year if vehicle else '' }}" min="1900" max="2100" required>
+        </div>
+        <div>
+            <label>Make</label>
+            <input type="text" name="make" value="{{ vehicle.Make if vehicle else '' }}" required>
+        </div>
+        <div>
+            <label>Model</label>
+            <input type="text" name="model" value="{{ vehicle.Model if vehicle else '' }}" required>
+        </div>
+        <div>
+            <label>Price ($)</label>
+            <input type="number" name="price" step="0.01" value="{{ vehicle.Price if vehicle else '' }}" min="0" required>
+        </div>
+        <div>
+            <label>Mileage</label>
+            <input type="number" name="mileage" value="{{ vehicle.Mileage if vehicle else '' }}" min="0" required>
+        </div>
+        <div>
+            <label>Condition</label>
+            <select name="condition" required>
+                <option value="new"  {{ 'selected' if vehicle and vehicle.VehicleCondition=='new' }}>New</option>
+                <option value="used" {{ 'selected' if vehicle and vehicle.VehicleCondition=='used' }}>Used</option>
+            </select>
+        </div>
+        <div>
+            <label>Availability</label>
+            <select name="status" required>
+                <option value="available" {{ 'selected' if vehicle and vehicle.AvailabilityStatus=='available' }}>Available</option>
+                <option value="pending"   {{ 'selected' if vehicle and vehicle.AvailabilityStatus=='pending' }}>Pending</option>
+                <option value="sold"      {{ 'selected' if vehicle and vehicle.AvailabilityStatus=='sold' }}>Sold</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-actions">
+        <button type="submit" class="btn btn-primary">{{ 'Save Changes' if vehicle else 'Add Vehicle' }}</button>
+        <a href="{{ '/vehicles/' + vehicle.VehicleID|string if vehicle else '/vehicles' }}" class="btn btn-secondary">Cancel</a>
+    </div>
+</form>
+</div>
+{% endblock %}

@@ -1,0 +1,58 @@
+{% extends "layout.html" %}
+{% block title %}Vehicle Inventory{% endblock %}
+{% block content %}
+<h1>Vehicle Inventory</h1>
+
+<div class="card" style="margin-bottom:16px">
+<form method="GET" action="/vehicles">
+    <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end">
+        <div><label>Make</label><input type="text" name="make" value="{{ make }}" placeholder="Honda…"></div>
+        <div><label>Model</label><input type="text" name="model" value="{{ model }}" placeholder="Accord…"></div>
+        <div><label>Year</label><input type="number" name="year" value="{{ year }}" placeholder="2024" style="width:100px"></div>
+        <div><label>Max Price</label><input type="number" name="max_price" value="{{ max_price }}" placeholder="50000" style="width:120px"></div>
+        <div>
+            <label>Condition</label>
+            <select name="condition" style="width:120px">
+                <option value="">Any</option>
+                <option value="new" {{ 'selected' if condition=='new' }}>New</option>
+                <option value="used" {{ 'selected' if condition=='used' }}>Used</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Filter</button>
+        <a href="/vehicles" class="btn btn-secondary">Clear</a>
+        <a href="/vehicles/new" class="btn btn-outline" style="margin-left:auto">+ Add Vehicle</a>
+    </div>
+</form>
+</div>
+
+<div class="card table-wrap">
+<table>
+    <thead><tr>
+        <th>ID</th><th>Year</th><th>Make</th><th>Model</th><th>VIN</th>
+        <th>Price</th><th>Mileage</th><th>Condition</th><th>Status</th><th></th>
+    </tr></thead>
+    <tbody>
+    {% for v in vehicles %}
+    {% set sc = 'badge-green' if v.AvailabilityStatus=='available' else ('badge-yellow' if v.AvailabilityStatus=='pending' else 'badge-gray') %}
+    <tr>
+        <td style="color:var(--muted)">{{ v.VehicleID }}</td>
+        <td>{{ v.Year }}</td>
+        <td>{{ v.Make }}</td>
+        <td>{{ v.Model }}</td>
+        <td style="font-size:.78rem;color:var(--muted)">{{ v.VIN }}</td>
+        <td>${{ "%.2f"|format(v.Price) }}</td>
+        <td>{{ "{:,}".format(v.Mileage) }}</td>
+        <td><span class="badge {{ 'badge-blue' if v.VehicleCondition=='new' else 'badge-yellow' }}">{{ v.VehicleCondition }}</span></td>
+        <td><span class="badge {{ sc }}">{{ v.AvailabilityStatus }}</span></td>
+        <td>
+            <a href="/vehicles/{{ v.VehicleID }}" class="btn btn-sm btn-secondary">View</a>
+            <a href="/vehicles/{{ v.VehicleID }}/edit" class="btn btn-sm btn-outline">Edit</a>
+        </td>
+    </tr>
+    {% else %}
+    <tr><td colspan="10" style="text-align:center;color:var(--muted);padding:30px">No vehicles match the filter.</td></tr>
+    {% endfor %}
+    </tbody>
+</table>
+</div>
+{% endblock %}

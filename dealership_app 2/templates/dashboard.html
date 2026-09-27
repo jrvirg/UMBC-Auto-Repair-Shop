@@ -1,0 +1,91 @@
+{% extends "layout.html" %}
+{% block title %}Dashboard – GT Dealership{% endblock %}
+{% block content %}
+
+<h1>Welcome, {{ username }}</h1>
+<p style="color:var(--muted);margin-bottom:28px;font-size:.9rem;">
+    Role: <strong style="color:var(--text)">{{ job }}</strong>
+</p>
+
+<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:18px">
+
+    {# Always visible #}
+    <a href="/customers" class="dash-card">
+        <div class="dc-icon">👥</div>
+        <div class="dc-title">Customers</div>
+        <div class="dc-sub">Register, search &amp; view history</div>
+    </a>
+
+    <a href="/vehicles" class="dash-card">
+        <div class="dc-icon">🚗</div>
+        <div class="dc-title">Vehicles</div>
+        <div class="dc-sub">Inventory management</div>
+    </a>
+
+    {# Sales division #}
+    {% if division_id == 1 or job == 'Administrator' %}
+    <a href="/sales" class="dash-card">
+        <div class="dc-icon">💰</div>
+        <div class="dc-title">Sales</div>
+        <div class="dc-sub">Transactions &amp; records</div>
+    </a>
+    {% endif %}
+
+    {# Service division #}
+    {% if division_id == 2 or job == 'Administrator' %}
+    <a href="/service" class="dash-card">
+        <div class="dc-icon">🔧</div>
+        <div class="dc-title">Service</div>
+        <div class="dc-sub">Maintenance records &amp; parts</div>
+    </a>
+    {% endif %}
+
+    {# Finance division #}
+    {% if division_id == 3 or job == 'Administrator' %}
+    <a href="/loans" class="dash-card">
+        <div class="dc-icon">📋</div>
+        <div class="dc-title">Loans</div>
+        <div class="dc-sub">Financing &amp; payments</div>
+    </a>
+    <a href="/accounting" class="dash-card">
+        <div class="dc-icon">📊</div>
+        <div class="dc-title">Accounting</div>
+        <div class="dc-sub">Transactions &amp; revenue</div>
+    </a>
+    {% endif %}
+
+    <a href="/reports" class="dash-card">
+        <div class="dc-icon">📈</div>
+        <div class="dc-title">Reports</div>
+        <div class="dc-sub">Analytics &amp; summaries</div>
+    </a>
+
+    {% if job == 'Administrator' %}
+    <a href="/admin/employees" class="dash-card" style="border-color:var(--accent)">
+        <div class="dc-icon">⚙️</div>
+        <div class="dc-title">Admin</div>
+        <div class="dc-sub">Users, divisions &amp; departments</div>
+    </a>
+    {% endif %}
+
+</div>
+
+{% endblock %}
+
+{% block styles %}
+.dash-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 22px 20px;
+    text-decoration: none;
+    color: inherit;
+    transition: border-color .2s, transform .15s;
+    display: block;
+}
+.dash-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+.dc-icon { font-size: 1.8rem; margin-bottom: 10px; }
+.dc-title { font-family: 'Rajdhani', sans-serif; font-size: 1.1rem; font-weight: 700;
+            color: #fff; margin-bottom: 4px; }
+.dc-sub { font-size: .8rem; color: var(--muted); }
+{% endblock %}

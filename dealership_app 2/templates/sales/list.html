@@ -1,0 +1,52 @@
+{% extends "layout.html" %}
+{% block title %}Sales{% endblock %}
+{% block content %}
+<h1>Sales Transactions</h1>
+
+<div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px;align-items:flex-end">
+    <form method="GET" action="/sales" style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end">
+        <div>
+            <label>Department</label>
+            <select name="dept" style="width:200px">
+                <option value="">All Departments</option>
+                {% for d in departments %}
+                <option value="{{ d.DepartmentID }}" {{ 'selected' if dept==d.DepartmentID|string }}>{{ d.Name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div>
+            <label>Search</label>
+            <input type="text" name="q" value="{{ search }}" placeholder="Customer, make, model…">
+        </div>
+        <button type="submit" class="btn btn-primary">Filter</button>
+        <a href="/sales" class="btn btn-secondary">Clear</a>
+    </form>
+    <a href="/sales/new" class="btn btn-outline" style="margin-left:auto">+ New Sale</a>
+</div>
+
+<div class="card table-wrap">
+<table>
+    <thead><tr>
+        <th>ID</th><th>Date</th><th>Customer</th><th>Vehicle</th>
+        <th>Price</th><th>Payment</th><th>Financing</th><th>Dept</th><th>Staff</th>
+    </tr></thead>
+    <tbody>
+    {% for s in sales %}
+    <tr>
+        <td style="color:var(--muted)">{{ s.SaleID }}</td>
+        <td>{{ s.DateOfSale }}</td>
+        <td>{{ s.CustomerName }}</td>
+        <td>{{ s.Year }} {{ s.Make }} {{ s.Model }}</td>
+        <td>${{ "%.2f"|format(s.SalePrice) }}</td>
+        <td><span class="badge badge-blue">{{ s.PaymentMethod }}</span></td>
+        <td>{{ s.FinancingOption }}</td>
+        <td>{{ s.DeptName }}</td>
+        <td>{{ s.SalesPerson }}</td>
+    </tr>
+    {% else %}
+    <tr><td colspan="9" style="text-align:center;color:var(--muted);padding:30px">No sales records found.</td></tr>
+    {% endfor %}
+    </tbody>
+</table>
+</div>
+{% endblock %}

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register Employee – UMBC Autostore</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #ffffff;
+            --surface: #f5f7fa;
+            --border: #d1d5db;
+            --accent: #e8a020;
+            --text: #111827;
+            --muted: #6b7280;
+            --danger: #e05050;
+            --success: #3dba7a;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--surface);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 48px 16px 48px;
+        }
+        .page-brand {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent);
+            letter-spacing: 2px;
+            margin-bottom: 28px;
+        }
+        .register-box {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 36px 40px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 4px 20px rgba(0,0,0,.08);
+        }
+        .box-title {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 4px;
+        }
+        .subtitle { font-size: .82rem; color: var(--muted); margin-bottom: 24px; }
+        label { display: block; font-size: .78rem; color: var(--muted); margin-bottom: 4px; font-weight: 500; }
+        input, select {
+            width: 100%;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 10px 12px;
+            border-radius: 6px;
+            font-size: .9rem;
+            outline: none;
+            font-family: inherit;
+            transition: border-color .15s;
+        }
+        input:focus, select:focus { border-color: var(--accent); }
+        .field { margin-bottom: 14px; }
+        .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .field-row-3 { display: grid; grid-template-columns: 2fr 1fr 1.2fr; gap: 12px; }
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 11px;
+            border-radius: 6px;
+            border: none;
+            background: var(--accent);
+            color: #111827;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            letter-spacing: .5px;
+            cursor: pointer;
+            margin-top: 18px;
+            transition: opacity .15s;
+        }
+        .btn:hover { opacity: .85; }
+        .btn-secondary {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--text);
+        }
+        .flash {
+            padding: 10px 14px;
+            border-radius: 6px;
+            margin-bottom: 14px;
+            font-size: .85rem;
+        }
+        .flash.error   { background: rgba(224,80,80,.1); border: 1px solid var(--danger); color: #c0392b; }
+        .flash.success { background: rgba(61,186,122,.1); border: 1px solid var(--success); color: #1e8449; }
+    </style>
+</head>
+<body>
+
+<div class="page-brand">⬡ UMBC AUTOSTORE</div>
+
+<!-- ── Register Section ───────────────────────────── -->
+
+    <div class="register-box">
+        <div class="box-title">Register Account</div>
+        <div class="subtitle">Register as a Employee</div>
+
+         {% with messages = get_flashed_messages(with_categories=true) %}
+            {% for category, message in messages %}
+                <div class="flash {{ category }}">{{ message }}</div>
+            {% endfor %}
+         {% endwith %}
+
+        <form method="POST" action="/register">
+            <div class="field">
+                <label for="username">Choose a Username:</label>
+                <input type="text" id="username" name="username" required><br><br>
+            </div>
+
+            <div class="field">
+                <label for="password">Choose a Password:</label>
+                <input type="password" id="password" name="password" required><br><br>
+            </div>
+
+            <div class="field">
+                <label for="job">Choose a Job:</label>
+                <select type="job" id="job" name="job" required><br><br>
+                    <option value=""> -- Select a Job -- </option>
+                    <option value="Sales Associate"> Sales Associate </option>
+                    <option value="Sales Manager"> Sales Manager </option>
+                    <option value="Mechanic"> Mechanic </option>
+                    <option value="Body Tech"> Body Tech </option>
+                    <option value="Loan Officer"> Loan Officer </option>
+                    <option value="Parts Clerk"> Parts Clerk </option>
+                    <option value="Receptionist"> Receptionist </option>
+                    <option value="IT Specialist"> IT Specialist </option>
+                </select>
+            </div>
+
+            <div class="field">
+                <label for="department">Choose a department:</label>
+                <select type="department" id="department" name="department" required><br><br>
+                     <option value=""> -- Select a Department -- </option>
+                     <option value="1"> New Car Sales </option>
+                     <option value="2"> Used Car Sales </option>
+                     <option value="3"> Mechanical Service </option>
+                     <option value="4"> Body Shop </option>
+                     <option value="5"> Loan Processing </option>
+                     <option value="6"> Parts Counter </option>
+                     <option value="7"> Front Desk </option>
+                     <option value="8"> Advertising </option>
+                     <option value="9"> Tech Support </option>
+                     <option value="10"> Payroll </option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn">Register Account</button>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>

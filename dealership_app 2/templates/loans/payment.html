@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+{% block title %}Record Payment – Loan #{{ loan.LoanID }}{% endblock %}
+{% block content %}
+<h1>Record Payment — Loan #{{ loan.LoanID }}</h1>
+<p style="color:var(--muted);margin-bottom:24px">
+    Customer: <strong style="color:var(--text)">{{ loan.CustomerName }}</strong> &nbsp;·&nbsp;
+    Monthly Payment: <strong style="color:var(--accent)">${{ "%.2f"|format(loan.MonthlyPayment) }}</strong>
+</p>
+<div class="card" style="max-width:520px">
+<form method="POST">
+    <div class="form-grid">
+        <div>
+            <label>Due Date</label>
+            <input type="text" name="due_date" class="datepicker" placeholder="YYYY-MM-DD" required>
+        </div>
+        <div>
+            <label>Amount Paid ($)</label>
+            <input type="number" name="owed_amount" step="0.01" min="0"
+                   value="{{ "%.2f"|format(loan.MonthlyPayment) }}" required>
+        </div>
+        <div>
+            <label>Next Amount Due ($)</label>
+            <input type="number" name="next_due_amount" step="0.01" min="0"
+                   value="{{ "%.2f"|format(loan.MonthlyPayment) }}" required>
+        </div>
+    </div>
+    <div class="form-actions">
+        <button type="submit" class="btn btn-primary">Record Payment</button>
+        <a href="/loans/{{ loan.LoanID }}" class="btn btn-secondary">Cancel</a>
+    </div>
+</form>
+</div>
+{% endblock %}

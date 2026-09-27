@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}UMBC Autostore{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <style>
+        :root {
+            --bg:       #ffffff;
+            --surface:  #f5f7fa;
+            --border:   #d1d5db;
+            --accent:   #e8a020;
+            --accent2:  #c07010;
+            --text:     #111827;
+            --muted:    #6b7280;
+            --danger:   #e05050;
+            --success:  #3dba7a;
+            --info:     #4a9edd;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        /* ---- NAV ---- */
+        nav {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            padding: 0 24px;
+            height: 58px;
+            gap: 8px;
+        }
+        .nav-brand {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--accent);
+            letter-spacing: 1px;
+            margin-right: 16px;
+            white-space: nowrap;
+        }
+        nav a {
+            color: var(--muted);
+            text-decoration: none;
+            font-size: .82rem;
+            font-weight: 500;
+            padding: 6px 12px;
+            border-radius: 6px;
+            transition: color .15s, background .15s;
+            white-space: nowrap;
+        }
+        nav a:hover { color: var(--text); background: var(--border); }
+        nav a.active { color: var(--accent); }
+        .nav-right { margin-left: auto; display: flex; gap: 4px; align-items: center; }
+        .nav-user {
+            font-size: .78rem;
+            color: var(--muted);
+            padding: 4px 10px;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            margin-right: 6px;
+        }
+        .btn-logout {
+            background: transparent;
+            border: 1px solid var(--danger);
+            color: var(--danger) !important;
+            font-size: .78rem !important;
+            padding: 4px 12px !important;
+        }
+        .btn-logout:hover { background: var(--danger) !important; color: #fff !important; }
+
+        /* ---- FLASH ---- */
+        .flashes { padding: 12px 24px 0; }
+        .flash {
+            padding: 10px 16px;
+            border-radius: 6px;
+            margin-bottom: 8px;
+            font-size: .88rem;
+            font-weight: 500;
+        }
+        .flash.error   { background: rgba(224,80,80,.12); border: 1px solid var(--danger); color: #c0392b; }
+        .flash.success { background: rgba(61,186,122,.12); border: 1px solid var(--success); color: #27ae60; }
+
+        /* ---- MAIN ---- */
+        main { padding: 28px 28px; max-width: 1300px; margin: 0 auto; }
+        h1 { font-family: 'Rajdhani', sans-serif; font-size: 1.8rem; font-weight: 700;
+             color: var(--text); margin-bottom: 20px; letter-spacing: .5px; }
+        h2 { font-family: 'Rajdhani', sans-serif; font-size: 1.3rem; font-weight: 600;
+             color: var(--accent); margin: 24px 0 12px; }
+        h3 { font-family: 'Rajdhani', sans-serif; font-size: 1.1rem; color: var(--text); margin-bottom: 8px; }
+
+        /* ---- CARDS ---- */
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 20px 24px;
+            margin-bottom: 20px;
+        }
+
+        /* ---- TABLE ---- */
+        .table-wrap { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; font-size: .88rem; }
+        th {
+            background: var(--border);
+            color: var(--accent);
+            font-family: 'Rajdhani', sans-serif;
+            font-size: .9rem;
+            font-weight: 600;
+            letter-spacing: .5px;
+            padding: 10px 14px;
+            text-align: left;
+        }
+        td { padding: 10px 14px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+        tr:last-child td { border-bottom: none; }
+        tr:hover td { background: rgba(0,0,0,.04); }
+
+        /* ---- FORMS ---- */
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px,1fr)); gap: 16px; }
+        label { display: block; font-size: .8rem; color: var(--muted); margin-bottom: 4px; font-weight: 500; }
+        input[type=text], input[type=password], input[type=email],
+        input[type=number], input[type=date], select, textarea {
+            width: 100%;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: .88rem;
+            font-family: inherit;
+            outline: none;
+            transition: border-color .15s;
+        }
+        input:focus, select:focus, textarea:focus { border-color: var(--accent); }
+        .form-actions { margin-top: 20px; display: flex; gap: 10px; }
+
+        /* ---- BUTTONS ---- */
+        .btn {
+            display: inline-block;
+            padding: 8px 18px;
+            border-radius: 6px;
+            font-size: .85rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            border: none;
+            transition: opacity .15s, background .15s;
+            font-family: 'Rajdhani', sans-serif;
+            letter-spacing: .5px;
+        }
+        .btn:hover { opacity: .85; }
+        .btn-primary { background: var(--accent); color: #111827; }
+        .btn-secondary { background: var(--border); color: var(--text); }
+        .btn-danger { background: var(--danger); color: #fff; }
+        .btn-sm { padding: 4px 10px; font-size: .78rem; }
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+        }
+
+        /* ---- SEARCH BAR ---- */
+        .search-bar { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+        .search-bar input, .search-bar select { max-width: 220px; }
+
+        /* ---- BADGES ---- */
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-size: .74rem;
+            font-weight: 600;
+        }
+        .badge-green  { background: rgba(61,186,122,.15); color: #1e8449; }
+        .badge-yellow { background: rgba(232,160,32,.15); color: #b7770d; }
+        .badge-red    { background: rgba(224,80,80,.15); color: #c0392b; }
+        .badge-blue   { background: rgba(74,158,221,.15); color: #2471a3; }
+        .badge-gray   { background: rgba(107,114,128,.15); color: var(--muted); }
+
+        /* ---- STATS ROW ---- */
+        .stats-row { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px,1fr)); gap: 16px; margin-bottom: 24px; }
+        .stat-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 18px 20px;
+        }
+        .stat-card .label { font-size: .75rem; color: var(--muted); font-weight: 500; margin-bottom: 4px; }
+        .stat-card .value { font-family: 'Rajdhani', sans-serif; font-size: 1.8rem;
+                            font-weight: 700; color: var(--accent); line-height: 1; }
+
+        {% block styles %}{% endblock %}
+    </style>
+</head>
+<body>
+<nav>
+    <span class="nav-brand">⬡ UMBC AUTOSTORE</span>
+
+    {% if 'employee_id' in session %}
+        <a href="/dashboard">Dashboard</a>
+        <a href="/customers">Customers</a>
+        <a href="/vehicles">Vehicles</a>
+
+        {# Sales division (1) or admin #}
+        {% if session.get('division_id') == 1 or session.get('job') == 'Administrator' %}
+        <a href="/sales">Sales</a>
+        {% endif %}
+
+        {# Service division (2) or admin #}
+        {% if session.get('division_id') == 2 or session.get('job') == 'Administrator' %}
+        <a href="/service">Service</a>
+        {% endif %}
+
+        {# Finance division (3) or admin #}
+        {% if session.get('division_id') == 3 or session.get('job') == 'Administrator' %}
+        <a href="/loans">Loans</a>
+        <a href="/accounting">Accounting</a>
+        {% endif %}
+
+        <a href="/reports">Reports</a>
+
+        {% if session.get('job') == 'Administrator' %}
+        <a href="/admin/employees">Admin</a>
+        {% endif %}
+
+        <div class="nav-right">
+            <span class="nav-user">{{ session.get('username') }} · {{ session.get('job') }}</span>
+            <a href="/logout" class="btn-logout">Logout</a>
+        </div>
+
+    {% elif 'customer_id' in session %}
+        <div class="nav-right">
+            <span class="nav-user">{{ session.get('customer_name') }} · Customer</span>
+            <a href="/logout" class="btn-logout">Logout</a>
+        </div>
+
+    {% else %}
+        <div class="nav-right">
+            <a href="/">Login</a>
+        </div>
+    {% endif %}
+</nav>
+
+<div class="flashes">
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% for category, message in messages %}
+    <div class="flash {{ category }}">{{ message }}</div>
+  {% endfor %}
+{% endwith %}
+</div>
+
+<main>
+{% block content %}{% endblock %}
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    flatpickr('.datepicker', { dateFormat: 'Y-m-d', allowInput: true });
+});
+</script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

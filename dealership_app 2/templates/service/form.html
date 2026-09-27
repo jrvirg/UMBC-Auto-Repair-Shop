@@ -1,0 +1,78 @@
+{% extends "layout.html" %}
+{% block title %}New Service Record{% endblock %}
+{% block content %}
+<h1>Create Service Record</h1>
+<div class="card" style="max-width:800px">
+<form method="POST">
+    <div class="form-grid">
+        <div>
+            <label>Customer</label>
+            <select name="cust_id" required>
+                <option value="">— Select —</option>
+                {% for c in customers %}
+                <option value="{{ c.CustID }}">{{ c.Name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div>
+            <label>Vehicle</label>
+            <select name="vehicle_id" required>
+                <option value="">— Select —</option>
+                {% for v in vehicles %}
+                <option value="{{ v.VehicleID }}">{{ v.Make }} {{ v.Model }} {{ v.Year }} ({{ v.VIN }})</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div>
+            <label>Service Date</label>
+            <input type="text" name="service_date" class="datepicker" placeholder="YYYY-MM-DD" required>
+        </div>
+        <div>
+            <label>Total Service Cost ($)</label>
+            <input type="number" name="service_price" step="0.01" min="0" required>
+        </div>
+    </div>
+
+    <h2 style="margin-top:24px">Parts Used</h2>
+    <div id="parts-container">
+        <div class="part-row" style="display:flex;gap:10px;margin-bottom:8px;align-items:flex-end">
+            <div style="flex:2">
+                <label>Part</label>
+                <select name="part_id">
+                    <option value="">— None —</option>
+                    {% for p in parts %}
+                    <option value="{{ p.PartID }}">{{ p.Name }} (${{ "%.2f"|format(p.PartCost) }})</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div style="flex:1">
+                <label>Quantity</label>
+                <input type="number" name="quantity" value="1" min="0">
+            </div>
+        </div>
+    </div>
+
+    <button type="button" onclick="addPartRow()" class="btn btn-secondary btn-sm" style="margin-top:4px">+ Add Part</button>
+
+    <div class="form-actions" style="margin-top:24px">
+        <button type="submit" class="btn btn-primary">Create Service Record</button>
+        <a href="/service" class="btn btn-secondary">Cancel</a>
+    </div>
+</form>
+</div>
+
+<script>
+const partOptions = `{% for p in parts %}<option value="{{ p.PartID }}">{{ p.Name }} (${{ "%.2f"|format(p.PartCost) }})</option>{% endfor %}`;
+function addPartRow() {
+    const container = document.getElementById('parts-container');
+    const div = document.createElement('div');
+    div.className = 'part-row';
+    div.style = 'display:flex;gap:10px;margin-bottom:8px;align-items:flex-end';
+    div.innerHTML = `
+        <div style="flex:2"><select name="part_id"><option value="">— None —</option>${partOptions}</select></div>
+        <div style="flex:1"><input type="number" name="quantity" value="1" min="0"></div>
+        <button type="button" onclick="this.parentElement.remove()" class="btn btn-sm btn-danger">✕</button>`;
+    container.appendChild(div);
+}
+</script>
+{% endblock %}

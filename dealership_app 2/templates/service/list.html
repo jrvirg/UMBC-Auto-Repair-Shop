@@ -1,0 +1,44 @@
+{% extends "layout.html" %}
+{% block title %}Service Records{% endblock %}
+{% block content %}
+<h1>Maintenance Service Records</h1>
+
+<div style="display:flex;gap:10px;margin-bottom:20px;align-items:flex-end">
+    <form method="GET" action="/service" style="display:flex;gap:10px">
+        <div>
+            <label>Search</label>
+            <input type="text" name="q" value="{{ search }}" placeholder="Customer, make, VIN…">
+        </div>
+        <button type="submit" class="btn btn-primary">Search</button>
+        {% if search %}<a href="/service" class="btn btn-secondary">Clear</a>{% endif %}
+    </form>
+    <a href="/service/new" class="btn btn-outline" style="margin-left:auto">+ New Service</a>
+</div>
+
+<div class="card table-wrap">
+<table>
+    <thead><tr>
+        <th>ID</th><th>Date</th><th>Customer</th><th>Vehicle</th><th>VIN</th><th>Cost</th><th>Parts Used</th><th></th>
+    </tr></thead>
+    <tbody>
+    {% for s in services %}
+    <tr>
+        <td style="color:var(--muted)">{{ s.ServiceID }}</td>
+        <td>{{ s.ServiceDate }}</td>
+        <td>{{ s.CustomerName }}</td>
+        <td>{{ s.Year }} {{ s.Make }} {{ s.Model }}</td>
+        <td style="font-size:.78rem;color:var(--muted)">{{ s.VIN }}</td>
+        <td>${{ "%.2f"|format(s.ServicePrice) }}</td>
+        <td style="font-size:.8rem">{{ s.Parts or '—' }}</td>
+        <td>
+            <a href="/service/{{ s.ServiceID }}" class="btn btn-sm btn-secondary">View</a>
+            <a href="/service/{{ s.ServiceID }}/edit" class="btn btn-sm btn-outline">Edit</a>
+        </td>
+    </tr>
+    {% else %}
+    <tr><td colspan="8" style="text-align:center;color:var(--muted);padding:30px">No service records found.</td></tr>
+    {% endfor %}
+    </tbody>
+</table>
+</div>
+{% endblock %}

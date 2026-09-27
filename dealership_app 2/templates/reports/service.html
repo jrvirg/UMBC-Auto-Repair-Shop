@@ -1,0 +1,47 @@
+{% extends "layout.html" %}
+{% block title %}Service Report{% endblock %}
+{% block content %}
+<div style="display:flex;align-items:center;gap:16px;margin-bottom:20px">
+    <h1 style="margin:0">Service Report</h1>
+    <a href="/reports" class="btn btn-secondary btn-sm">← Reports</a>
+</div>
+
+{% if summary %}
+<div class="stats-row">
+    <div class="stat-card"><div class="label">Total Services</div>
+        <div class="value">{{ summary.TotalServices }}</div></div>
+    <div class="stat-card"><div class="label">Service Revenue</div>
+        <div class="value">${{ "%.0f"|format(summary.TotalRevenue or 0) }}</div></div>
+</div>
+{% endif %}
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+<div>
+<h2>Top Parts Used</h2>
+<div class="card table-wrap">
+<table>
+    <thead><tr><th>Part</th><th>Times Used</th></tr></thead>
+    <tbody>
+    {% for p in top_parts %}
+    <tr><td>{{ p.Part }}</td><td>{{ p.UsedCount }}</td></tr>
+    {% endfor %}
+    </tbody>
+</table>
+</div>
+</div>
+
+<div>
+<h2>Revenue by Month</h2>
+<div class="card table-wrap">
+<table>
+    <thead><tr><th>Month</th><th>Services</th><th>Revenue</th></tr></thead>
+    <tbody>
+    {% for m in by_month %}
+    <tr><td>{{ m.Month }}</td><td>{{ m.Services }}</td><td>${{ "%.2f"|format(m.Revenue) }}</td></tr>
+    {% endfor %}
+    </tbody>
+</table>
+</div>
+</div>
+</div>
+{% endblock %}

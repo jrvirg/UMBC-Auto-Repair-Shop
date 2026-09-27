@@ -1,0 +1,47 @@
+{% extends "layout.html" %}
+{% block title %}{{ 'Edit' if customer else 'New' }} Customer{% endblock %}
+{% block content %}
+<h1>{{ 'Edit' if customer else 'Register New' }} Customer</h1>
+
+<div class="card" style="max-width:700px">
+<form method="POST">
+    <div class="form-grid">
+        <div>
+            <label>Full Name</label>
+            <input type="text" name="name" value="{{ customer.Name if customer else '' }}" required>
+        </div>
+        <div>
+            <label>Email</label>
+            <input type="email" name="email" value="{{ customer.Email if customer else '' }}" required>
+        </div>
+
+        <div style="grid-column:1/-1">
+            <label>Street Address</label>
+            <input type="text" name="street" value="{{ addr_street }}" required placeholder="123 Main St">
+        </div>
+        <div>
+            <label>City</label>
+            <input type="text" name="city" value="{{ addr_city }}" required placeholder="Baltimore">
+        </div>
+        <div>
+            <label>State</label>
+            <input type="text" name="state" value="{{ addr_state }}" maxlength="2" required placeholder="MD">
+        </div>
+        <div>
+            <label>ZIP Code</label>
+            <input type="text" name="zip" value="{{ addr_zip }}" required placeholder="21201">
+        </div>
+
+        <div style="grid-column:1/-1">
+            <label>Phone Numbers <span style="color:var(--muted)">(comma-separated, 10 digits each)</span></label>
+            <input type="text" name="phones" value="{{ phones_str if phones_str else '' }}"
+                   placeholder="4105551234, 4435559876">
+        </div>
+    </div>
+    <div class="form-actions">
+        <button type="submit" class="btn btn-primary">{{ 'Save Changes' if customer else 'Register Customer' }}</button>
+        <a href="{{ '/customers/' + customer.CustID|string if customer else '/customers' }}" class="btn btn-secondary">Cancel</a>
+    </div>
+</form>
+</div>
+{% endblock %}

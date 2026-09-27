@@ -1,0 +1,58 @@
+{% extends "layout.html" %}
+{% block title %}Loans{% endblock %}
+{% block content %}
+<h1>Loan Records</h1>
+
+<div style="display:flex;gap:10px;margin-bottom:20px;align-items:flex-end">
+    <form method="GET" action="/loans" style="display:flex;gap:10px">
+        <div>
+            <label>Status</label>
+            <select name="status" style="width:160px">
+                <option value="">All</option>
+                <option value="yes" {{ 'selected' if status=='yes' }}>Approved</option>
+                <option value="no"  {{ 'selected' if status=='no'  }}>Denied</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Filter</button>
+        <a href="/loans" class="btn btn-secondary">Clear</a>
+    </form>
+    <a href="/loans/new" class="btn btn-outline" style="margin-left:auto">+ New Loan</a>
+</div>
+
+<div class="card table-wrap">
+<table>
+    <thead><tr>
+        <th>ID</th><th>Customer</th><th>Vehicle</th><th>Amount</th>
+        <th>Rate</th><th>Term</th><th>Monthly</th><th>Status</th><th></th>
+    </tr></thead>
+    <tbody>
+    {% for l in loans %}
+    <tr>
+        <td style="color:var(--muted)">{{ l.LoanID }}</td>
+        <td>{{ l.CustomerName }}</td>
+        <td>{{ l.Year }} {{ l.Make }} {{ l.Model }}</td>
+        <td>${{ "%.2f"|format(l.LoanAmount) }}</td>
+        <td>{{ l.InterestRate }}%</td>
+        <td>{{ l.LoanTerm }} mo</td>
+        <td>${{ "%.2f"|format(l.MonthlyPayment) }}</td>
+        <td>
+            {% if l.LoanApprovalStatus == 'yes' %}
+                <span class="badge badge-green">Approved</span>
+            {% else %}
+                <span class="badge badge-red">Denied</span>
+            {% endif %}
+        </td>
+        <td>
+            <a href="/loans/{{ l.LoanID }}" class="btn btn-sm btn-secondary">View</a>
+            {% if l.LoanApprovalStatus == 'yes' %}
+            <a href="/loans/{{ l.LoanID }}/payment" class="btn btn-sm btn-outline">+ Payment</a>
+            {% endif %}
+        </td>
+    </tr>
+    {% else %}
+    <tr><td colspan="9" style="text-align:center;color:var(--muted);padding:30px">No loans found.</td></tr>
+    {% endfor %}
+    </tbody>
+</table>
+</div>
+{% endblock %}

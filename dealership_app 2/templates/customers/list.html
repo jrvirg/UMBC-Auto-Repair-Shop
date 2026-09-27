@@ -1,0 +1,39 @@
+{% extends "layout.html" %}
+{% block title %}Customers{% endblock %}
+{% block content %}
+<h1>Customers</h1>
+
+<div class="search-bar">
+    <form method="GET" action="/customers" style="display:flex;gap:10px;flex-wrap:wrap">
+        <input type="text" name="q" placeholder="Search name or email…" value="{{ search }}">
+        <button type="submit" class="btn btn-primary">Search</button>
+        {% if search %}<a href="/customers" class="btn btn-secondary">Clear</a>{% endif %}
+    </form>
+    <a href="/customers/new" class="btn btn-outline" style="margin-left:auto">+ New Customer</a>
+</div>
+
+<div class="card table-wrap">
+<table>
+    <thead><tr>
+        <th>ID</th><th>Name</th><th>Email</th><th>Address</th><th>Phones</th><th></th>
+    </tr></thead>
+    <tbody>
+    {% for c in customers %}
+    <tr>
+        <td style="color:var(--muted)">{{ c.CustID }}</td>
+        <td><strong>{{ c.Name }}</strong></td>
+        <td>{{ c.Email }}</td>
+        <td>{{ c.Address }}</td>
+        <td>{{ c.Phones or '—' }}</td>
+        <td>
+            <a href="/customers/{{ c.CustID }}" class="btn btn-sm btn-secondary">View</a>
+            <a href="/customers/{{ c.CustID }}/edit" class="btn btn-sm btn-outline">Edit</a>
+        </td>
+    </tr>
+    {% else %}
+    <tr><td colspan="6" style="text-align:center;color:var(--muted);padding:30px">No customers found.</td></tr>
+    {% endfor %}
+    </tbody>
+</table>
+</div>
+{% endblock %}

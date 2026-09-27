@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+{% block title %}Employee Management{% endblock %}
+{% block content %}
+<div style="display:flex;align-items:center;gap:16px;margin-bottom:24px">
+    <h1 style="margin:0">Employee Accounts</h1>
+    <a href="/admin/divisions" class="btn btn-outline btn-sm">Manage Divisions</a>
+    <a href="/admin/employees/new" class="btn btn-primary btn-sm">+ New Employee</a>
+</div>
+
+<div class="card table-wrap">
+<table>
+    <thead><tr>
+        <th>ID</th><th>Username</th><th>Job Title</th><th>Department</th><th>Division</th><th></th>
+    </tr></thead>
+    <tbody>
+    {% for e in employees %}
+    <tr>
+        <td style="color:var(--muted)">{{ e.EmployeeID }}</td>
+        <td><strong>{{ e.Username }}</strong></td>
+        <td>{{ e.Job }}</td>
+        <td>{{ e.DeptName }}</td>
+        <td>{{ e.DivName }}</td>
+        <td><a href="/admin/employees/{{ e.EmployeeID }}/edit" class="btn btn-sm btn-outline">Edit</a></td>
+    </tr>
+    {% else %}
+    <tr><td colspan="6" style="text-align:center;color:var(--muted);padding:30px">No employees found.</td></tr>
+    {% endfor %}
+    </tbody>
+</table>
+</div>
+{% endblock %}

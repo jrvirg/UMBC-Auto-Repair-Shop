@@ -1,0 +1,49 @@
+{% extends "layout.html" %}
+{% block title %}Accounting Report{% endblock %}
+{% block content %}
+<div style="display:flex;align-items:center;gap:16px;margin-bottom:20px">
+    <h1 style="margin:0">Accounting Report</h1>
+    <a href="/reports" class="btn btn-secondary btn-sm">← Reports</a>
+</div>
+
+{% if summary %}
+<div class="stats-row">
+    <div class="stat-card"><div class="label">Total Revenue</div>
+        <div class="value">${{ "%.0f"|format(summary.TotalRevenue or 0) }}</div></div>
+    <div class="stat-card"><div class="label">Total Transactions</div>
+        <div class="value">{{ summary.TotalTransactions }}</div></div>
+</div>
+{% endif %}
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+<div>
+<h2>Revenue by Type</h2>
+<div class="card table-wrap">
+<table>
+    <thead><tr><th>Type</th><th>Count</th><th>Total</th></tr></thead>
+    <tbody>
+    {% for r in by_type %}
+    <tr><td>{{ r.TransactionType }}</td><td>{{ r.Count }}</td>
+        <td>${{ "%.2f"|format(r.Total) }}</td></tr>
+    {% endfor %}
+    </tbody>
+</table>
+</div>
+</div>
+
+<div>
+<h2>Revenue by Department</h2>
+<div class="card table-wrap">
+<table>
+    <thead><tr><th>Department</th><th>Sales</th><th>Revenue</th></tr></thead>
+    <tbody>
+    {% for r in by_dept %}
+    <tr><td>{{ r.Department }}</td><td>{{ r.Sales }}</td>
+        <td>${{ "%.2f"|format(r.Revenue) }}</td></tr>
+    {% endfor %}
+    </tbody>
+</table>
+</div>
+</div>
+</div>
+{% endblock %}

@@ -1,0 +1,83 @@
+{% extends "layout.html" %}
+{% block title %}Accounting{% endblock %}
+{% block content %}
+<h1>Accounting Overview</h1>
+
+{% set total_rev = namespace(v=0) %}
+{% for r in by_type %}{% set total_rev.v = total_rev.v + r.Total %}{% endfor %}
+
+<div class="stats-row">
+    <div class="stat-card">
+        <div class="label">Total Revenue</div>
+        <div class="value">${{ "%.0f"|format(total_rev.v) }}</div>
+    </div>
+    {% for r in by_type %}
+    <div class="stat-card">
+        <div class="label">{{ r.TransactionType }}</div>
+        <div class="value" style="font-size:1.3rem">${{ "%.0f"|format(r.Total) }}</div>
+    </div>
+    {% endfor %}
+</div>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+
+<div>
+<h2>Revenue by Type</h2>
+<div class="card table-wrap">
+<table>
+    <thead><tr><th>Type</th><th>Count</th><th>Total</th></tr></thead>
+    <tbody>
+    {% for r in by_type %}
+    <tr>
+        <td>{{ r.TransactionType }}</td>
+        <td>{{ r.Count }}</td>
+        <td>${{ "%.2f"|format(r.Total) }}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+</div>
+</div>
+
+<div>
+<h2>Monthly Summary (Last 12 mo)</h2>
+<div class="card table-wrap">
+<table>
+    <thead><tr><th>Month</th><th>Transactions</th><th>Total</th></tr></thead>
+    <tbody>
+    {% for m in monthly %}
+    <tr>
+        <td>{{ m.Month }}</td>
+        <td>{{ m.Transactions }}</td>
+        <td>${{ "%.2f"|format(m.Total) }}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+<h2>Recent Transactions</h2>
+<div class="card table-wrap">
+<table>
+    <thead><tr><th>ID</th><th>Date</th><th>Type</th><th>Amount</th><th>Customer</th></tr></thead>
+    <tbody>
+    {% for t in transactions %}
+    <tr>
+        <td style="color:var(--muted)">{{ t.TransactionID }}</td>
+        <td>{{ t.Date }}</td>
+        <td><span class="badge {% if t.TransactionType=='Vehicle Sale' %}badge-green{% elif t.TransactionType=='Service' %}badge-blue{% else %}badge-yellow{% endif %}">
+            {{ t.TransactionType }}
+        </span></td>
+        <td>${{ "%.2f"|format(t.Amount) }}</td>
+        <td>{{ t.RelatedCustomer or '—' }}</td>
+    </tr>
+    {% else %}
+    <tr><td colspan="5" style="text-align:center;color:var(--muted);padding:20px">No transactions.</td></tr>
+    {% endfor %}
+    </tbody>
+</table>
+</div>
+{% endblock %}

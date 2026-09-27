@@ -1,0 +1,51 @@
+{% extends "layout.html" %}
+{% block title %}{{ 'Edit' if employee else 'New' }} Employee{% endblock %}
+{% block content %}
+<h1>{{ 'Edit' if employee else 'Create New' }} Employee Account</h1>
+<div class="card" style="max-width:560px">
+<form method="POST">
+    <div class="form-grid">
+        {% if not employee %}
+        <div>
+            <label>Username</label>
+            <input type="text" name="username" required>
+        </div>
+        <div>
+            <label>Password</label>
+            <input type="password" name="password" required>
+        </div>
+        {% else %}
+        <div>
+            <label>Username</label>
+            <input type="text" value="{{ employee.Username }}" disabled style="opacity:.5">
+        </div>
+        <div>
+            <label>New Password <span style="color:var(--muted)">(leave blank to keep current)</span></label>
+            <input type="password" name="password">
+        </div>
+        {% endif %}
+        <div>
+            <label>Job Title</label>
+            <input type="text" name="job" value="{{ employee.Job if employee else '' }}" required
+                   placeholder="Sales Associate, Mechanic, Loan Officer…">
+        </div>
+        <div>
+            <label>Department</label>
+            <select name="department_id" required>
+                <option value="">— Select —</option>
+                {% for d in departments %}
+                <option value="{{ d.DepartmentID }}"
+                    {{ 'selected' if employee and employee.DepartmentID == d.DepartmentID }}>
+                    {{ d.Name }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    <div class="form-actions">
+        <button type="submit" class="btn btn-primary">{{ 'Save Changes' if employee else 'Create Account' }}</button>
+        <a href="/admin/employees" class="btn btn-secondary">Cancel</a>
+    </div>
+</form>
+</div>
+{% endblock %}

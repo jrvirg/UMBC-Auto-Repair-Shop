@@ -1,0 +1,36 @@
+{% extends "layout.html" %}
+{% block title %}Reports{% endblock %}
+{% block content %}
+<h1>Reports &amp; Analytics</h1>
+<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:18px;max-width:900px">
+    <a href="/reports/sales" class="dash-card">
+        <div class="dc-icon">💰</div>
+        <div class="dc-title">Sales Report</div>
+        <div class="dc-sub">Revenue, units sold, by dept &amp; period</div>
+    </a>
+    <a href="/reports/service" class="dash-card">
+        <div class="dc-icon">🔧</div>
+        <div class="dc-title">Service Report</div>
+        <div class="dc-sub">Services performed, revenue, top parts</div>
+    </a>
+    <a href="/reports/loans" class="dash-card">
+        <div class="dc-icon">📋</div>
+        <div class="dc-title">Financial Report</div>
+        <div class="dc-sub">Loan approvals, balances, payments</div>
+    </a>
+    <a href="/reports/accounting" class="dash-card">
+        <div class="dc-icon">📊</div>
+        <div class="dc-title">Accounting Report</div>
+        <div class="dc-sub">Total revenue, dept breakdown, summaries</div>
+    </a>
+</div>
+{% endblock %}
+{% block styles %}
+.dash-card { background:var(--surface);border:1px solid var(--border);border-radius:12px;
+    padding:22px 20px;text-decoration:none;color:inherit;
+    transition:border-color .2s,transform .15s;display:block; }
+.dash-card:hover { border-color:var(--accent);transform:translateY(-2px); }
+.dc-icon { font-size:1.8rem;margin-bottom:10px; }
+.dc-title { font-family:'Rajdhani',sans-serif;font-size:1.1rem;font-weight:700;color:#fff;margin-bottom:4px; }
+.dc-sub { font-size:.8rem;color:var(--muted); }
+{% endblock %}

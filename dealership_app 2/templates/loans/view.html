@@ -1,0 +1,47 @@
+{% extends "layout.html" %}
+{% block title %}Loan #{{ loan.LoanID }}{% endblock %}
+{% block content %}
+<div style="display:flex;align-items:center;gap:16px;margin-bottom:24px">
+    <h1 style="margin:0">Loan #{{ loan.LoanID }}</h1>
+    {% if loan.LoanApprovalStatus == 'yes' %}
+    <a href="/loans/{{ loan.LoanID }}/payment" class="btn btn-outline btn-sm">+ Record Payment</a>
+    {% endif %}
+    <a href="/loans" class="btn btn-secondary btn-sm">← Back</a>
+</div>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:24px">
+<div class="card">
+    <h2 style="margin-top:0">Loan Details</h2>
+    <table style="width:100%">
+        <tr><td style="color:var(--muted);padding:6px 0;width:130px">Customer</td><td>{{ loan.CustomerName }}</td></tr>
+        <tr><td style="color:var(--muted);padding:6px 0">Vehicle</td><td>{{ loan.Year }} {{ loan.Make }} {{ loan.Model }}</td></tr>
+        <tr><td style="color:var(--muted);padding:6px 0">Loan Amount</td><td>${{ "%.2f"|format(loan.LoanAmount) }}</td></tr>
+        <tr><td style="color:var(--muted);padding:6px 0">Interest Rate</td><td>{{ loan.InterestRate }}%</td></tr>
+        <tr><td style="color:var(--muted);padding:6px 0">Term</td><td>{{ loan.LoanTerm }} months</td></tr>
+        <tr><td style="color:var(--muted);padding:6px 0">Monthly Payment</td><td>${{ "%.2f"|format(loan.MonthlyPayment) }}</td></tr>
+        <tr><td style="color:var(--muted);padding:6px 0">Status</td>
+            <td>{% if loan.LoanApprovalStatus=='yes' %}<span class="badge badge-green">Approved</span>
+                {% else %}<span class="badge badge-red">Denied</span>{% endif %}</td></tr>
+    </table>
+</div>
+</div>
+
+<h2>Payment History</h2>
+<div class="card table-wrap">
+<table>
+    <thead><tr><th>Payment ID</th><th>Due Date</th><th>Amount Owed</th><th>Next Due</th></tr></thead>
+    <tbody>
+    {% for p in payments %}
+    <tr>
+        <td>{{ p.PaymentID }}</td>
+        <td>{{ p.DueDate }}</td>
+        <td>${{ "%.2f"|format(p.OwedAmount) }}</td>
+        <td>${{ "%.2f"|format(p.NextDueAmount) }}</td>
+    </tr>
+    {% else %}
+    <tr><td colspan="4" style="text-align:center;color:var(--muted);padding:20px">No payments recorded.</td></tr>
+    {% endfor %}
+    </tbody>
+</table>
+</div>
+{% endblock %}

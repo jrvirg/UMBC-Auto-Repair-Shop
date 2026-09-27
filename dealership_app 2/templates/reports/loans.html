@@ -1,0 +1,50 @@
+{% extends "layout.html" %}
+{% block title %}Financial Report{% endblock %}
+{% block content %}
+<div style="display:flex;align-items:center;gap:16px;margin-bottom:20px">
+    <h1 style="margin:0">Financial / Loan Report</h1>
+    <a href="/reports" class="btn btn-secondary btn-sm">← Reports</a>
+</div>
+
+<h2>Loan Approvals</h2>
+<div class="stats-row">
+{% for s in by_status %}
+<div class="stat-card">
+    <div class="label">{{ 'Approved' if s.Status=='yes' else 'Denied' }}</div>
+    <div class="value">{{ s.Count }}</div>
+    <div style="font-size:.8rem;color:var(--muted);margin-top:4px">${{ "%.0f"|format(s.TotalAmount) }}</div>
+</div>
+{% endfor %}
+</div>
+
+<h2>Outstanding Balances</h2>
+<div class="card table-wrap">
+<table>
+    <thead><tr>
+        <th>Loan ID</th><th>Customer</th><th>Loan Amount</th>
+        <th>Total Paid</th><th>Balance</th><th>Status</th>
+    </tr></thead>
+    <tbody>
+    {% for l in loans %}
+    <tr>
+        <td>{{ l.LoanID }}</td>
+        <td>{{ l.Customer }}</td>
+        <td>${{ "%.2f"|format(l.LoanAmount) }}</td>
+        <td>${{ "%.2f"|format(l.TotalPaid) }}</td>
+        <td>
+            {% if l.Balance > 0 %}
+            <span style="color:var(--danger)">${{ "%.2f"|format(l.Balance) }}</span>
+            {% else %}
+            <span class="badge badge-green">Paid Off</span>
+            {% endif %}
+        </td>
+        <td>{% if l.LoanApprovalStatus=='yes' %}<span class="badge badge-green">Approved</span>
+            {% else %}<span class="badge badge-red">Denied</span>{% endif %}</td>
+    </tr>
+    {% else %}
+    <tr><td colspan="6" style="text-align:center;color:var(--muted);padding:20px">No loan data.</td></tr>
+    {% endfor %}
+    </tbody>
+</table>
+</div>
+{% endblock %}
